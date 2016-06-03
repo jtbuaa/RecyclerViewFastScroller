@@ -26,12 +26,12 @@ public class ColorGroupSectionTitleIndicator extends SectionTitleIndicator<Color
     @Override
     public void setSection(ColorGroup colorGroup) {
         // Example of using a single character
-        setTitleText(colorGroup.getName().charAt(0) + "");
+        //setTitleText(colorGroup.getName().charAt(0) + "");
 
         // Example of using a longer string
         // setTitleText(colorGroup.getName());
 
-        setIndicatorTextColor(colorGroup.getAsColor());
+        //setIndicatorTextColor(colorGroup.getAsColor());
     }
 
 }

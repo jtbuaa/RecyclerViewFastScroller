@@ -3,21 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/section_title_popup"
     android:layout_width="wrap_content"
-    android:minWidth="@dimen/list_item_height"
-    android:layout_height="@dimen/list_item_height"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/section_indicator_background_default_rounded"
+    android:background="#00000000"
     >
 
-    <TextView
-        android:id="@+id/section_indicator_text"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:textSize="48dp"
-        android:paddingLeft="@dimen/margin_small"
-        android:paddingRight="@dimen/margin_small"
-        android:layout_gravity="center"
-        android:gravity="center"
-        />
+    <ImageView
+        android:id="@+id/section_indicator_image"
+        android:src="@drawable/handler"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
 
 </FrameLayout>
