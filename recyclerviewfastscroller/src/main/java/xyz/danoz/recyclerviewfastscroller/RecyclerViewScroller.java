@@ -2,6 +2,7 @@ package xyz.danoz.recyclerviewfastscroller;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
+import android.webkit.WebView;
 
 /**
  * To be implemented by any object that scrolls a {@link RecyclerView}
@@ -10,9 +11,9 @@ public interface RecyclerViewScroller {
 
     /**
      * What good is a RecyclerViewScroller without a {@link RecyclerView}?!
-     * @param recyclerView to scroll using the scroller
+     * @param webView to scroll using the scroller
      */
-    public void setRecyclerView(RecyclerView recyclerView);
+    public void setRecyclerView(WebView webView);
 
     /**
      * Since {@link OnScrollListener} is not implemented as an interface, RecyclerViewScrollers cannot implement this

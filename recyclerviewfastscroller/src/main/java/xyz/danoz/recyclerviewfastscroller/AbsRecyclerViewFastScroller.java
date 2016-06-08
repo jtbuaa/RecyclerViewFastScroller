@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.SectionIndexer;
 
@@ -40,7 +41,7 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
      *      Consider making RecyclerView final and should be passed in using a custom attribute
      *      This could allow for some type checking on the section indicator wrt the adapter of the RecyclerView
     */
-    private RecyclerView mRecyclerView;
+    private WebView mWebView;
     private SectionIndicator mSectionIndicator;
 
     /** If I had my druthers, AbsRecyclerViewFastScroller would implement this as an interface, but Android has made
@@ -91,38 +92,6 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
         }
     }
 
-    /**
-     * Provides the ability to programmatically set the color of the fast scroller's handle
-     * @param color for the handle to be
-     */
-    public void setHandleColor(int color) {
-        mHandle.setBackgroundColor(color);
-    }
-
-    /**
-     * Provides the ability to programmatically set the background drawable of the fast scroller's handle
-     * @param drawable for the handle's background
-     */
-    public void setHandleBackground(Drawable drawable) {
-        setViewBackground(mHandle, drawable);
-    }
-
-    /**
-     * Provides the ability to programmatically set the color of the fast scroller's bar
-     * @param color for the bar to be
-     */
-    public void setBarColor(int color) {
-        mBar.setBackgroundColor(color);
-    }
-
-    /**
-     * Provides the ability to programmatically set the background drawable of the fast scroller's bar
-     * @param drawable for the bar's background
-     */
-    public void setBarBackground(Drawable drawable) {
-        setViewBackground(mBar, drawable);
-    }
-
     @TargetApi(VERSION_CODES.JELLY_BEAN)
     private void setViewBackground(View view, Drawable background) {
         if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
@@ -134,8 +103,8 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
     }
 
     @Override
-    public void setRecyclerView(RecyclerView recyclerView) {
-        mRecyclerView = recyclerView;
+    public void setRecyclerView(WebView webView) {
+        mWebView = webView;
     }
 
     public void setSectionIndicator(SectionIndicator sectionIndicator) {
@@ -149,43 +118,24 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
 
     @Override
     public void scrollTo(float scrollProgress, boolean fromTouch) {
-        int position = getPositionFromScrollProgress(scrollProgress);
-        mRecyclerView.scrollToPosition(position);
-
-        updateSectionIndicator(position, scrollProgress);
-    }
-
-    private void updateSectionIndicator(int position, float scrollProgress) {
-        if (mSectionIndicator != null) {
-            mSectionIndicator.setProgress(scrollProgress);
-            if (mRecyclerView.getAdapter() instanceof SectionIndexer) {
-                SectionIndexer indexer = ((SectionIndexer) mRecyclerView.getAdapter());
-                int section = indexer.getSectionForPosition(position);
-                Object[] sections = indexer.getSections();
-                mSectionIndicator.setSection(sections[section]);
-            }
-        }
-    }
-
-    private int getPositionFromScrollProgress(float scrollProgress) {
-        return (int) (mRecyclerView.getAdapter().getItemCount() * scrollProgress);
+        mWebView.scrollBy(0, (int)scrollProgress);
     }
 
     /**
      * Classes that extend AbsFastScroller must implement their own {@link OnScrollListener} to respond to scroll
-     * events when the {@link #mRecyclerView} is scrolled NOT using the fast scroller.
-     * @return an implementation for responding to scroll events from the {@link #mRecyclerView}
+     * events when the {@link #mWebView} is scrolled NOT using the fast scroller.
+     * @return an implementation for responding to scroll events from the {@link #mWebView}
      */
     @NonNull
     public OnScrollListener getOnScrollListener() {
         if (mOnScrollListener == null) {
             mOnScrollListener = new OnScrollListener() {
                 @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                public void onScrolled(WebView webView, int dx, int dy) {
                     float scrollProgress = 0;
                     ScrollProgressCalculator scrollProgressCalculator = getScrollProgressCalculator();
                     if (scrollProgressCalculator != null) {
-                        scrollProgress = scrollProgressCalculator.calculateScrollProgress(recyclerView);
+                        scrollProgress = scrollProgressCalculator.calculateScrollProgress(webView);
                     }
                     moveHandleToPosition(scrollProgress);
                 }
@@ -203,7 +153,7 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
         }
 
         // synchronize the handle position to the RecyclerView
-        float scrollProgress = getScrollProgressCalculator().calculateScrollProgress(mRecyclerView);
+        float scrollProgress = getScrollProgressCalculator().calculateScrollProgress(mWebView);
         moveHandleToPosition(scrollProgress);
     }
 
