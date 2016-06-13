@@ -9,15 +9,12 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.SectionIndexer;
 
 import xyz.danoz.recyclerviewfastscroller.calculation.progress.ScrollProgressCalculator;
 import xyz.danoz.recyclerviewfastscroller.calculation.progress.TouchableScrollProgressCalculator;
@@ -45,8 +42,8 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
     private SectionIndicator mSectionIndicator;
 
     /** If I had my druthers, AbsRecyclerViewFastScroller would implement this as an interface, but Android has made
-     * {@link OnScrollListener} an abstract class instead of an interface. Hmmm */
-    protected OnScrollListener mOnScrollListener;
+     * {@link OnTouchListener} an abstract class instead of an interface. Hmmm */
+    protected OnTouchListener mOnScrollListener;
 
     public AbsRecyclerViewFastScroller(Context context) {
         this(context, null, 0);
@@ -122,20 +119,20 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
     }
 
     /**
-     * Classes that extend AbsFastScroller must implement their own {@link OnScrollListener} to respond to scroll
+     * Classes that extend AbsFastScroller must implement their own {@link OnTouchListener} to respond to scroll
      * events when the {@link #mWebView} is scrolled NOT using the fast scroller.
      * @return an implementation for responding to scroll events from the {@link #mWebView}
      */
     @NonNull
-    public OnScrollListener getOnScrollListener() {
+    public OnTouchListener getOnScrollListener() {
         if (mOnScrollListener == null) {
-            mOnScrollListener = new OnScrollListener() {
+            mOnScrollListener = new OnTouchListener() {
                 @Override
-                public void onScrolled(WebView webView, int dx, int dy) {
+                public boolean onTouch(View view, MotionEvent event) {
                     float scrollProgress = 0;
                     ScrollProgressCalculator scrollProgressCalculator = getScrollProgressCalculator();
                     if (scrollProgressCalculator != null) {
-                        scrollProgress = scrollProgressCalculator.calculateScrollProgress(webView);
+                        scrollProgress = scrollProgressCalculator.calculateScrollProgress(view);
                     }
                     moveHandleToPosition(scrollProgress);
                 }

@@ -2,6 +2,7 @@ package xyz.danoz.recyclerviewfastscroller;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
+import android.view.View;
 import android.webkit.WebView;
 
 /**
@@ -24,7 +25,7 @@ public interface RecyclerViewScroller {
      *
      * @return this scroller's listener for a RecyclerView's scrolling.
      */
-    public OnScrollListener getOnScrollListener();
+    public View.OnTouchListener getOnScrollListener();
 
     /**
      * Indicate to the scroller that it should scroll to a certain amount of scroll progress
