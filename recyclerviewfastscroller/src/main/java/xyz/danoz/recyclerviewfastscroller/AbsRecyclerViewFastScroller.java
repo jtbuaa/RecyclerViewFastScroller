@@ -118,6 +118,9 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
         mWebView.scrollBy(0, (int)scrollProgress);
     }
 
+    int mode;
+    private static final int QUICKSCROLL = 1;
+    private static final int NONE = 0;
     /**
      * Classes that extend AbsFastScroller must implement their own {@link OnTouchListener} to respond to scroll
      * events when the {@link #mWebView} is scrolled NOT using the fast scroller.
@@ -135,6 +138,46 @@ public abstract class AbsRecyclerViewFastScroller extends FrameLayout implements
                         scrollProgress = scrollProgressCalculator.calculateScrollProgress(view);
                     }
                     moveHandleToPosition(scrollProgress);
+
+                    /*switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_DOWN:
+                            if(event.getX()>this.getWidth()-50&&(this.canScrollVertically(0)||this.canScrollVertically(1))){
+                                scrollbarTop = (float)this.computeVerticalScrollExtent()/this.computeVerticalScrollRange()*this.computeVerticalScrollOffset();
+                                scrollbarBtm = (float)this.computeVerticalScrollExtent()/this.computeVerticalScrollRange()*(this.computeVerticalScrollExtent()+this.computeVerticalScrollOffset());
+                                if((scrollbarBtm-scrollbarTop)<50){
+                                    scrollbarTop = scrollbarTop-20;
+                                    scrollbarBtm = scrollbarBtm+20;
+                                }
+                                if(event.getY() > scrollbarTop && event.getY() < scrollbarBtm){
+                                    scrollOffset = event.getY() - scrollbarTop;
+                                    mode = QUICKSCROLL;
+                                }
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            mode = NONE;
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if(mode==QUICKSCROLL){
+                                scrollbarTop = (float)this.computeVerticalScrollExtent()/this.computeVerticalScrollRange()*this.computeVerticalScrollOffset();
+                                scrollbarBtm = (float)this.computeVerticalScrollExtent()/this.computeVerticalScrollRange()*(this.computeVerticalScrollExtent()+this.computeVerticalScrollOffset());
+                                if((scrollbarBtm-scrollbarTop)<50){
+                                    scrollbarTop = scrollbarTop-20;
+                                    scrollbarBtm = scrollbarBtm+20;
+                                }
+                                int scrollto = Math.round((float)this.computeVerticalScrollRange()
+                                        /this.computeVerticalScrollExtent()*
+                                        (event.getY()-scrollOffset));
+                                if(scrollto>-1
+                                        &&(scrollto+this.computeVerticalScrollExtent())<this.computeVerticalScrollRange()+1
+                                        ){
+                                    this.scrollTo(0,scrollto);
+                                }
+                                return true;
+                            }
+                            break;
+                    }*/
+                    return false;
                 }
             };
         }
